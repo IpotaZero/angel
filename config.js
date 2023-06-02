@@ -2,7 +2,7 @@ let config = {
     //フォント
     font: "serif",
     //"key","mouse"など
-    cursorMode: "mouse",
+    cursorMode: "key",
     //カーソルの速さ
     cursorSpeed: 20,
     //遷移の速さ
