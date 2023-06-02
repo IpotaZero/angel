@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ja">
+<title>test9</title>
+
+<body>
+    <!--キャンバスを作る　横960px縦640px-->
+    <canvas id="canvas0" width="512" height="512"></canvas>
+
+    <script src="Class.js"></script>
+
+    <script src="config.js"></script>
+
+    <script src="Init.js"></script>
+
+    <script src="GameClass.js"></script>
+
+    <script src="Events.js"></script>
+
+    <script src="Ifunctions.js"></script>
+
+    <script src="Scenes.js"></script>
+
+    <script>
+
+
+        let stageBgm = stageBgmList[0];
+        let stageBgmNum = 0;
+
+        NowStage = Sts.stage_op;
+
+        const scenemanager = new SceneManager(scene3);
+
+        function loop() {
+            scenemanager.NowScene.Loop();
+
+            //外枠描画
+            Irect(0, 0, width, height, "black", "stroke", 4);
+
+            if (stageBgm.ended) {
+                stageBgmNum = (stageBgmNum + 1) % stageBgmList.length;
+                stageBgm = stageBgmList[stageBgmNum];
+                stageBgm.currentTime = 0;
+                stageBgm.volume = 0.6;
+                stageBgm.play();
+            }
+
+            stageBgm.muted = config.muteBgm;
+
+            Push = [];
+        }
+
+        //24fpsで実行
+        const play = setInterval(loop, 1000 / 24);
+
+    </script>
+
+</body>
+
+</html>
