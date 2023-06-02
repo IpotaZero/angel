@@ -115,7 +115,7 @@ const Scene2 = class extends Scene {
             Itext(1000, 0, Iheight + fontsize * 2, "→");
             Itext(1000, fontsize * 2, Iheight + fontsize * 2, Items[this.inum].name); ctx.drawImage(Items[this.inum].icon, fontsize, Iheight + fontsize, fontsize, fontsize);
             if (this.inum > 0) { Itext(1000, fontsize * 2, Iheight + fontsize, Items[this.inum - 1].name); ctx.drawImage(Items[this.inum - 1].icon, fontsize, Iheight, fontsize, fontsize); }
-            if (this.inum < Items.length - 1) { Itext(1000, fontsize * 2, Iheight + fontsize * 3, Items[this.inum + 1].name); ctx.drawImage(Items[this.inum].icon, fontsize, Iheight + fontsize * 2, fontsize, fontsize); }
+            if (this.inum < Items.length - 1) { Itext(1000, fontsize * 2, Iheight + fontsize * 3, Items[this.inum + 1].name); ctx.drawImage(Items[this.inum + 1].icon, fontsize, Iheight + fontsize * 2, fontsize, fontsize); }
 
             //キー操作
             if (Push.includes("ArrowUp")) { this.inum--; this.iex = false; se_key.currentTime = 0; se_key.play(); }

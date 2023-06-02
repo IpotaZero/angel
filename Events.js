@@ -21,6 +21,9 @@ const bg_love_3 = new Image(); bg_love_3.src = "images/bg_love_3.png";
 const cursorImg = new Image(); cursorImg.src = "images/cursor.png";
 const img_arrow = new Image(); img_arrow.src = "images/Arrow.png";
 
+const icn_burn = new Image(); icn_burn.src = "images/icn_burn.png";
+const icn_beaker = new Image(); icn_beaker.src = "images/icn_beaker.png";
+
 const se_click = new Audio("sounds/click.wav");
 const se_key = new Audio("sounds/KeyBoard.wav");
 const se_ats = new Audio("sounds/click.wav");
@@ -43,8 +46,8 @@ let Evs = {};
 let Sts = {};
 
 
-Evs.cv_op = new Conversation([new ImgTxt([bg_op], ["言葉の力、名前の力", "所謂言霊ってやつを信じているので", "私は今ここにいるのです"]), new ImgTxt([bg0], [""])]); Evs.cv_op.End = () => { NowStage = Sts.stage0; };
-Evs.cv_beaker0 = new Conversation([new ImgTxt(null, ["冷たくて、透明で、美しい", "ビーカーを手に入れた"])]); Evs.cv_beaker0.End = () => { Items.push(new Item("ビーカー", "きれい")); NowStage = Sts.stage1; };
+Evs.cv_op = new Conversation([new ImgTxt([bg_op], ["天使:言葉の力、名前の力", "天使:所謂言霊ってやつを信じているので", "天使:私は今ここにいるのです"]), new ImgTxt([bg0], [""])]); Evs.cv_op.End = () => { NowStage = Sts.stage0; };
+Evs.cv_beaker0 = new Conversation([new ImgTxt(null, ["冷たくて、透明で、美しい", "ビーカーを手に入れた"])]); Evs.cv_beaker0.End = () => { Items.push(new Item("ビーカー", "きれい", icn_beaker)); NowStage = Sts.stage1; };
 
 Sts.stage_op = new Stage(4, 4, [bg0]); Sts.stage_op.register(0, 2, 2, 2, Evs.cv_op);
 Sts.stage0 = new Stage(4, 4, [bg0]); Sts.stage0.register(0, 2, 2, 2, Evs.cv_beaker0);
@@ -65,7 +68,7 @@ MakeMap([
 ]);
 
 //会話イベントの生成および設定
-Evs.cv_burner = new Conversation([new ImgTxt(null, ["ブス"])]); Evs.cv_burner.End = () => { se_ats.play(); ItemPush(new Item("やけど", "あつい")) }; Sts.stage2.assign(2, 1, Evs.cv_burner);
+Evs.cv_burner = new Conversation([new ImgTxt(null, ["ブス"])]); Evs.cv_burner.End = () => { se_ats.play(); ItemPush(new Item("やけど", "あつい", icn_burn)) }; Sts.stage2.assign(2, 1, Evs.cv_burner);
 Evs.cv_ethanol1 = new Conversation([new ImgTxt([bg_ethanol_0, bg_ethanol_1, bg_ethanol_2], ["", "おい、やけどしてるじゃないか", "まったく..."]), new ImgTxt([bg3], [""])]);
 Evs.cv_ethanol = new Conversation([new ImgTxt(null, ["やめときなよ、僕にかかわるのは", "何一ついいことなんてない"])]);
 Evs.cv_ethanol.End = () => {
@@ -80,6 +83,8 @@ Evs.cv_love = new Conversation([new ImgTxt([bg_love_0, bg_love_3], ["???:ねぇ�
 Sts.stage5.register(1, 1, 2, 2, Evs.cv_love);
 
 
+
+/**--------------------------------------------------------------------------------------------------------- */
 function MakeMap(map) {
     //横方向
     for (let j = 0; j < map.length; j++) {
