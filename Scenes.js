@@ -51,7 +51,7 @@ const Scene0 = class extends Scene {
 
         //カーソルの描画
         Icircle(cursor.dp.x, cursor.dp.y, cursor.r, "rgba(0,0,255,0.3)");
-        ctx.drawImage(cursorImg, cursor.dp.x - 10, cursor.dp.y);
+        ctx.drawImage(Imgs.img_cursor, cursor.dp.x - 10, cursor.dp.y);
 
         if (config.cd) {
             //座標の表示
@@ -122,20 +122,20 @@ const Scene2 = class extends Scene {
             if (Push.includes("ArrowDown")) { this.inum++; this.iex = false; se_key.currentTime = 0; se_key.play(); }
 
             this.inum = (this.inum + Items.length) % Items.length;
-        }
 
-        if (this.iex) {
-            Itext(1000, fontsize, Iheight + fontsize * 5, Items[this.inum].ex);
+            //説明を見る
+            if (Push.includes("KeyZ")) {
+                this.iex = !this.iex;
+                se_click.play();
+            }
+
+            if (this.iex) {
+                Itext(1000, fontsize, Iheight + fontsize * 5, Items[this.inum].ex);
+            }
         }
 
         //枠線
         Iline("black", 2, [{ x: 0, y: Iheight }, { x: width, y: Iheight }]);
-
-        //説明を見る
-        if (Push.includes("KeyZ")) {
-            this.iex = !this.iex;
-            se_click.play();
-        }
 
         //閉じる
         if (Push.includes("KeyX")) {

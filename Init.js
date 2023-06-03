@@ -16,7 +16,7 @@ let mouse = new vec(0, 0);
 document.addEventListener('keydown', keydownEvent, false);
 document.addEventListener('keyup', keyupEvent, false);
 cvs.addEventListener('mousemove', getMousePosition, false);
-document.addEventListener("mousedown", getMouseClick, false);
+cvs.addEventListener("mousedown", getMouseClick, false);
 
 function keydownEvent(e) {
     if (!Pressed.includes(e.code)) {
@@ -38,3 +38,13 @@ function getMouseClick(e) {
 }
 
 let fontsize = 24;
+
+function button0() {
+    if (config.cursorMode == "key") {
+        config.cursorMode = "mouse";
+        document.getElementById("button0").value = "cursorMode:mouse";
+    } else {
+        config.cursorMode = "key";
+        document.getElementById("button0").value = "cursorMode:key";
+    }
+}

@@ -56,16 +56,16 @@ const Stage = class {
                     if (s.name == "Movement") {
                         switch (s.dir) {
                             case "right":
-                                ctx.drawImage(img_arrow, 0, 0, 128, 128, width / this.w * j, height / this.h * i, 128, 128);
+                                ctx.drawImage(Imgs.img_arrow, 0, 0, 128, 128, width / this.w * j, height / this.h * i, 128, 128);
                                 break;
                             case "left":
-                                ctx.drawImage(img_arrow, 128, 0, 128, 128, width / this.w * j, height / this.h * i, 128, 128);
+                                ctx.drawImage(Imgs.img_arrow, 128, 0, 128, 128, width / this.w * j, height / this.h * i, 128, 128);
                                 break;
                             case "up":
-                                ctx.drawImage(img_arrow, 256, 0, 128, 128, width / this.w * j, height / this.h * i, 128, 128);
+                                ctx.drawImage(Imgs.img_arrow, 256, 0, 128, 128, width / this.w * j, height / this.h * i, 128, 128);
                                 break;
                             case "down":
-                                ctx.drawImage(img_arrow, 384, 0, 128, 128, width / this.w * j, height / this.h * i, 128, 128);
+                                ctx.drawImage(Imgs.img_arrow, 384, 0, 128, 128, width / this.w * j, height / this.h * i, 128, 128);
                                 break;
                         }
 
