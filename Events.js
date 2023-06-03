@@ -28,8 +28,8 @@ const se_click = new Audio("sounds/click.wav");
 const se_key = new Audio("sounds/KeyBoard.wav");
 const se_ats = new Audio("sounds/click.wav");
 
-const bgm_op = new Audio("sounds/h22.wav");
-const bgm_stage = new Audio("sounds/h25.wav");
+const bgm_op = new Audio("sounds/Shingoki.wav");
+const bgm_stage = new Audio("sounds/Kachohugetsu.wav");
 
 let stageBgmList = [bgm_stage, bgm_op];
 
