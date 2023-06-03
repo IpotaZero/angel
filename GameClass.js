@@ -18,10 +18,10 @@ const Stage = class {
         this.stage = _stage;
         this.h = _h;
         this.w = _w;
-        this.bg = imageArr;
         this.frame = 0;
-        this.animeFrame = 24;
+        this.animeNum = 0;
 
+        this.bg = imageArr;
     }
 
     //代入
@@ -44,8 +44,9 @@ const Stage = class {
 
     //描画
     draw() {
-        ctx.drawImage(this.bg[Math.floor(this.frame / this.animeFrame * this.bg.length)], 0, 0, width, height);
-        this.frame = (this.frame + 1) % this.animeFrame;
+        ctx.drawImage(this.bg[this.animeNum], 0, 0, width, height);
+        this.frame++;
+        if (this.bg[this.animeNum + 1] == this.frame) { this.animeNum = (this.animeNum + 2) % this.bg.length; this.frame = 0; }
 
         for (let i = 0; i < this.h; i++) {
             for (let j = 0; j < this.w; j++) {
@@ -229,6 +230,7 @@ const ImgTxt = class {
         this.num = 0;
         this.frame = 0;
         this.imgFrame = 0;
+        this.animeNum = 0;
     }
 
     Z() {
@@ -246,9 +248,9 @@ const ImgTxt = class {
 
         if (this.imgArr != null) {
             //画像表示
-            ctx.drawImage(this.imgArr[Math.floor(this.imgFrame / 24 * this.imgArr.length)], 0, 0, width, height);
-
-            this.imgFrame = (this.imgFrame + 1) % 24;
+            ctx.drawImage(this.imgArr[this.animeNum], 0, 0, width, height);
+            this.imgFrame++;
+            if (this.imgFrame == this.imgArr[this.animeNum + 1]) { this.animeNum = (this.animeNum + 2) % this.imgArr.length; this.imgFrame = 0; }
         }
 
         if (this.txtArr[this.num] != "") {

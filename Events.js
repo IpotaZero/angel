@@ -13,7 +13,7 @@ SerialImg("bg_ethanol", 2);
 
 SerialImg("bg_love", 3);
 
-RegisterImg("bg_NaOH")
+SerialImg("bg_NaOH", 2)
 
 RegisterImg("img_cursor");
 RegisterImg("img_arrow");
@@ -58,17 +58,17 @@ let Sts = {};
 Evs.cv_op = new Conversation([new ImgTxt([Imgs.bg_op], ["天使:言葉の力、名前の力", "天使:所謂言霊ってやつを信じているので", "天使:私は今ここにいるのです"]), new ImgTxt([Imgs.bg_0], [""])]); Evs.cv_op.End = () => { NowStage = Sts.stage0; };
 Evs.cv_beaker0 = new Conversation([new ImgTxt(null, ["冷たくて、透明で、美しい", "ビーカーを手に入れた"])]); Evs.cv_beaker0.End = () => { Items.push(new Item("ビーカー", "きれい", Imgs.icn_beaker)); NowStage = Sts.stage1; };
 
-Sts.stage_op = new Stage(4, 4, [Imgs.bg_0]); Sts.stage_op.register(0, 2, 2, 2, Evs.cv_op);
-Sts.stage0 = new Stage(4, 4, [Imgs.bg_0]); Sts.stage0.register(0, 2, 2, 2, Evs.cv_beaker0);
+Sts.stage_op = new Stage(4, 4, [Imgs.bg_0, 8]); Sts.stage_op.register(0, 2, 2, 2, Evs.cv_op);
+Sts.stage0 = new Stage(4, 4, [Imgs.bg_0, 8]); Sts.stage0.register(0, 2, 2, 2, Evs.cv_beaker0);
 
 
 //ステージの生成
-Sts.stage1 = new Stage(4, 4, [Imgs.bg_1]);
-Sts.stage2 = new Stage(4, 4, [Imgs.bg_2_0, Imgs.bg_2_1, Imgs.bg_2_2]);
-Sts.stage3 = new Stage(4, 4, [Imgs.bg_3]);
-Sts.stage4 = new Stage(4, 4, [Imgs.bg_NaOH]);
-Sts.stage5 = new Stage(4, 4, [Imgs.bg_love_0, Imgs.bg_love_1, Imgs.bg_love_2]);
-Sts.stage6 = new Stage(4, 4, [Imgs.bg_pro]);
+Sts.stage1 = new Stage(4, 4, [Imgs.bg_1, 8]);
+Sts.stage2 = new Stage(4, 4, [Imgs.bg_2_0, 8, Imgs.bg_2_1, 8, Imgs.bg_2_2, 8]);
+Sts.stage3 = new Stage(4, 4, [Imgs.bg_3, 8]);
+Sts.stage4 = new Stage(4, 4, [Imgs.bg_NaOH_0, 237, Imgs.bg_NaOH_1, 1, Imgs.bg_NaOH_2, 1, Imgs.bg_NaOH_1, 1]);
+Sts.stage5 = new Stage(4, 4, [Imgs.bg_love_0, 8, Imgs.bg_love_1, 8, Imgs.bg_love_2, 8]);
+Sts.stage6 = new Stage(4, 4, [Imgs.bg_pro, 8]);
 
 //ステージ間の移動イベントの生成および設定
 MakeMap([
@@ -77,17 +77,17 @@ MakeMap([
 ]);
 
 //会話イベントの生成および設定
-Evs.cv_burner = new Conversation([new ImgTxt(null, ["ブス"])]); Evs.cv_burner.End = () => { se_ats.play(); ItemPush(new Item("やけど", "あつい", Imgs.icn_scald)) };
+Evs.cv_burner = new Conversation([new ImgTxt(null, ["ブス"])]); Evs.cv_burner.End = () => { se_ats.play(); ItemPush(new Item("やけど", "あつい", Imgs.icn_scald)); };
 Sts.stage2.assign(2, 1, Evs.cv_burner);
 
-Evs.cv_ethanol1 = new Conversation([new ImgTxt([Imgs.bg_ethanol_0, Imgs.bg_ethanol_1, Imgs.bg_ethanol_2], ["", "おい、やけどしてるじゃないか", "まったく..."]), new ImgTxt([Imgs.bg_3], [""])]);
+Evs.cv_ethanol1 = new Conversation([new ImgTxt([Imgs.bg_ethanol_0, 8, Imgs.bg_ethanol_1, 8, Imgs.bg_ethanol_2, 8], ["", "おい、やけどしてるじゃないか", "まったく..."]), new ImgTxt([Imgs.bg_3], [""])]);
 Evs.cv_ethanol = new Conversation([new ImgTxt(null, ["やめときなよ、僕にかかわるのは", "何一ついいことなんてない"])]); Evs.cv_ethanol.End = () => { if (FindItem("やけど")) { NextEvent.push(Evs.cv_ethanol1); } };
 Sts.stage3.register(2, 1, 2, 3, Evs.cv_ethanol);
 
 Evs.cv_beaker1 = new Conversation([new ImgTxt(null, ["濡れてる"])]);
 Sts.stage1.register(0, 3, 2, 1, Evs.cv_beaker1);
 
-Evs.cv_love = new Conversation([new ImgTxt([Imgs.bg_love_0, Imgs.bg_love_3], ["???:ねぇ！", "???:これ何が入ってると思う？", "天使:しらない", "???:愛だよ"])]);
+Evs.cv_love = new Conversation([new ImgTxt([Imgs.bg_love_0, 12, Imgs.bg_love_3, 12], ["???:ねぇ！", "???:これ何が入ってると思う？", "天使:しらない", "???:愛だよ"])]);
 Sts.stage5.register(1, 1, 2, 2, Evs.cv_love);
 
 //分岐テスト

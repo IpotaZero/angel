@@ -13,6 +13,4 @@ let config = {
     textSpeed: 1,
     //bgmきる?
     muteBgm: true,
-    //アニメーションの速さ
-    animeFrame: 6
 };
