@@ -214,7 +214,7 @@ const OneShot = class extends Event {
     End() {
 
     }
-}
+};
 
 //画像と文章のリストの合わせ、不透明度も持つ
 const ImgTxt = class {
@@ -256,7 +256,7 @@ const ImgTxt = class {
             Irect(0, Iheight, width, height - Iheight, "rgba(255,255,255,0.9)");
             //文字
             Ifont(24, "black");
-            Itext(this.frame * config.textSpeed, 0, Iheight + fontsize, this.txtArr[this.num]);
+            Itext5(this.frame * config.textSpeed, 0, Iheight + fontsize, fontsize, this.txtArr[this.num]);
         }
 
         this.alpha += 1 / 24;

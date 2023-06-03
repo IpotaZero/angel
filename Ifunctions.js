@@ -36,6 +36,11 @@ function Itext4(frame, x, y, _fontsize, textArr) {
     }
 }
 
+function Itext5(frame, x, y, _fontsize, text) {
+    let textArr = text.split("\n");
+    Itext4(frame, x, y, _fontsize, textArr);
+}
+
 function Icircle(x, y, r, c, id = "fill", size = 2) {
     ctx.beginPath();
     ctx.arc(x, y, r, 0, 2 * Math.PI);

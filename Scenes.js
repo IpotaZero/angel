@@ -14,10 +14,10 @@ const Scene0 = class extends Scene {
 
         if (config.cursorMode == "key") {
             //カーソルの移動
-            if (Pressed.includes("ArrowRight")) { cursor.dp.x += cursor.speed; }
-            if (Pressed.includes("ArrowLeft")) { cursor.dp.x -= cursor.speed; }
-            if (Pressed.includes("ArrowUp")) { cursor.dp.y -= cursor.speed; }
-            if (Pressed.includes("ArrowDown")) { cursor.dp.y += cursor.speed; }
+            if (Pressed.includes("ArrowRight")) { cursor.dp.x += config.cursorSpeed; }
+            if (Pressed.includes("ArrowLeft")) { cursor.dp.x -= config.cursorSpeed; }
+            if (Pressed.includes("ArrowUp")) { cursor.dp.y -= config.cursorSpeed; }
+            if (Pressed.includes("ArrowDown")) { cursor.dp.y += config.cursorSpeed; }
         } else if (config.cursorMode == "mouse") {
             cursor.dp = mouse;
         }
@@ -168,8 +168,8 @@ const Scene3 = class extends Scene {
         //描画
         ctx.clearRect(0, 0, width, height);
 
-        Ifont(48, "black");
-        Itext(this.frame, fontsize, fontsize, this.title);
+        Ifont(36, "black");
+        Itext(this.frame, 0, fontsize, this.title);
 
         Ifont(24, "black");
         Itext4(this.f, fontsize * 2, 120 + fontsize, fontsize, this.option);

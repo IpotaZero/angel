@@ -13,6 +13,8 @@ SerialImg("bg_ethanol", 2);
 
 SerialImg("bg_love", 3);
 
+RegisterImg("bg_NaOH")
+
 RegisterImg("img_cursor");
 RegisterImg("img_arrow");
 
@@ -64,7 +66,7 @@ Sts.stage0 = new Stage(4, 4, [Imgs.bg_0]); Sts.stage0.register(0, 2, 2, 2, Evs.c
 Sts.stage1 = new Stage(4, 4, [Imgs.bg_1]);
 Sts.stage2 = new Stage(4, 4, [Imgs.bg_2_0, Imgs.bg_2_1, Imgs.bg_2_2]);
 Sts.stage3 = new Stage(4, 4, [Imgs.bg_3]);
-Sts.stage4 = new Stage(4, 4, [Imgs.bg_pro]);
+Sts.stage4 = new Stage(4, 4, [Imgs.bg_NaOH]);
 Sts.stage5 = new Stage(4, 4, [Imgs.bg_love_0, Imgs.bg_love_1, Imgs.bg_love_2]);
 Sts.stage6 = new Stage(4, 4, [Imgs.bg_pro]);
 
@@ -75,21 +77,34 @@ MakeMap([
 ]);
 
 //会話イベントの生成および設定
-Evs.cv_burner = new Conversation([new ImgTxt(null, ["ブス"])]); Evs.cv_burner.End = () => { se_ats.play(); ItemPush(new Item("やけど", "あつい", Imgs.icn_scald)) }; Sts.stage2.assign(2, 1, Evs.cv_burner);
+Evs.cv_burner = new Conversation([new ImgTxt(null, ["ブス"])]); Evs.cv_burner.End = () => { se_ats.play(); ItemPush(new Item("やけど", "あつい", Imgs.icn_scald)) };
+Sts.stage2.assign(2, 1, Evs.cv_burner);
+
 Evs.cv_ethanol1 = new Conversation([new ImgTxt([Imgs.bg_ethanol_0, Imgs.bg_ethanol_1, Imgs.bg_ethanol_2], ["", "おい、やけどしてるじゃないか", "まったく..."]), new ImgTxt([Imgs.bg_3], [""])]);
-Evs.cv_ethanol = new Conversation([new ImgTxt(null, ["やめときなよ、僕にかかわるのは", "何一ついいことなんてない"])]);
-Evs.cv_ethanol.End = () => {
-    if (FindItem("やけど")) {
-        NextEvent.push(Evs.cv_ethanol1);
-    }
-};
+Evs.cv_ethanol = new Conversation([new ImgTxt(null, ["やめときなよ、僕にかかわるのは", "何一ついいことなんてない"])]); Evs.cv_ethanol.End = () => { if (FindItem("やけど")) { NextEvent.push(Evs.cv_ethanol1); } };
 Sts.stage3.register(2, 1, 2, 3, Evs.cv_ethanol);
-Evs.cv_beaker1 = new Conversation([new ImgTxt(null, ["濡れてる"])]); Sts.stage1.register(0, 3, 2, 1, Evs.cv_beaker1);
+
+Evs.cv_beaker1 = new Conversation([new ImgTxt(null, ["濡れてる"])]);
+Sts.stage1.register(0, 3, 2, 1, Evs.cv_beaker1);
 
 Evs.cv_love = new Conversation([new ImgTxt([Imgs.bg_love_0, Imgs.bg_love_3], ["???:ねぇ！", "???:これ何が入ってると思う？", "天使:しらない", "???:愛だよ"])]);
 Sts.stage5.register(1, 1, 2, 2, Evs.cv_love);
 
-
+//分岐テスト
+Evs.cv_NaOH_0 = new Conversation([new ImgTxt(null, ["???:ところでさ", "???:ひとの考えを無理やり変えようと\nするのって最低だと思わない？"])]); Evs.cv_NaOH_0.End = () => { Evs.cv_NaOH.property = 3; };
+Evs.cv_NaOH_1 = new Conversation([new ImgTxt(null, ["???:やぁ", "???:cursorが遅いときは\nF12を押してコンソールに", "config.cursorSpeed=48;", "とか入力するといいよ"])]); Evs.cv_NaOH_1.End = () => { Evs.cv_NaOH.property = 2; };
+Evs.cv_NaOH_2 = new Conversation([new ImgTxt(null, ["???:もう一回聞きたい?", "???:Evs.cv_NaOH.property=0;\nってしてみてよ"])]);
+Evs.cv_NaOH_3 = new Conversation([new ImgTxt(null, ["???:私はもうこの世界に興味ないんだ"])]);
+//分岐元
+Evs.cv_NaOH = new OneShot(); Evs.cv_NaOH.property = 1; Evs.cv_NaOH.End = () => {
+    switch (Evs.cv_NaOH.property) {
+        case 0: NextEvent.push(Evs.cv_NaOH_1, Evs.cv_NaOH_0); break;
+        case 1: NextEvent.push(Evs.cv_NaOH_1); break;
+        case 2: NextEvent.push(Evs.cv_NaOH_2); break;
+        case 3: NextEvent.push(Evs.cv_NaOH_3); break;
+    }
+};
+Sts.stage4.register(0, 1, 2, 2, Evs.cv_NaOH);
 
 /**--------------------------------------------------------------------------------------------------------- */
 function MakeMap(map) {

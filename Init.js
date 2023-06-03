@@ -39,12 +39,25 @@ function getMouseClick(e) {
 
 let fontsize = 24;
 
-function button0() {
-    if (config.cursorMode == "key") {
-        config.cursorMode = "mouse";
-        document.getElementById("button0").value = "cursorMode:mouse";
-    } else {
-        config.cursorMode = "key";
-        document.getElementById("button0").value = "cursorMode:key";
+function button(id) {
+    console.log("pressed_" + id);
+    switch (id) {
+        case "button0":
+            if (config.cursorMode == "key") {
+                config.cursorMode = "mouse";
+                document.getElementById("button0").value = "cursorMode:mouse";
+            } else {
+                config.cursorMode = "key";
+                document.getElementById("button0").value = "cursorMode:key";
+            }
+            break;
+        case "button1":
+            config.muteBgm = !config.muteBgm;
+            document.getElementById("button1").value = "muteBgm:" + config.muteBgm;
+            break;
+
     }
+
+    se_key.play();
+
 }

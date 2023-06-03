@@ -2,10 +2,18 @@
 <html lang="ja">
 <title>angel</title>
 
-<body>
-    <!--なにやってるのかわからん-->
-    <link rel="icon" href="data:,">
+<head>
+    <style>
+        body {
+            color: "black";
+            font-size: 16px;
+            font-family: serif;
+            line-height: 20px;
+        }
+    </style>
+</head>
 
+<body>
     <!--キャンバスを作る　横960px縦640px-->
     <canvas id="canvas0" width="512" height="512"></canvas>
 
@@ -15,17 +23,15 @@
 
     <script src="Init.js"></script>
 
+    <script src="Ifunctions.js"></script>
+
     <script src="GameClass.js"></script>
 
     <script src="Events.js"></script>
 
-    <script src="Ifunctions.js"></script>
-
     <script src="Scenes.js"></script>
 
     <script>
-
-
         let stageBgm = stageBgmList[0];
         let stageBgmNum = 0;
 
@@ -57,13 +63,15 @@
 
     </script>
 
-    <input type="button" id="button0" value="cursorMode:key" onclick="button0();"></input>
+    <br>
+    <input type="button" id="button0" value="cursorMode:key" onclick="button(id);"></input>
+    <input type="button" id="button1" value="muteBgm:true" onclick="button(id);"></input>
 
     <br>
     操作:<br>
-    矢印キーで移動<br>
-    Zキー∨Clickで決定<br>
-    Xキーでアイテム確認<br>
+    Arrowで移動<br>
+    KeyZ∨Clickで決定<br>
+    KeyXでアイテム確認<br>
     設定:<br>
     フォントなど<br>
     config.(name)=(数値や真偽値);<br>
