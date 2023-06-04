@@ -29,6 +29,8 @@ const se_ats = new Audio("sounds/click.wav");
 const bgm_op = new Audio("sounds/Shingoki.wav");
 const bgm_stage = new Audio("sounds/Kachohugetsu.wav");
 
+const bgm_boss_0 = new Audio("sounds/Weariness.wav");
+
 let stageBgmList = [bgm_stage, bgm_op];
 
 //0からnumまで登録

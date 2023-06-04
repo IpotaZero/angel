@@ -42,18 +42,21 @@ let fontsize = 24;
 function button(id) {
     console.log("pressed_" + id);
     switch (id) {
-        case "button0":
+        case "cursorMode":
             if (config.cursorMode == "key") {
                 config.cursorMode = "mouse";
-                document.getElementById("button0").value = "cursorMode:mouse";
+                document.getElementById("cursorMode").value = "cursorMode:mouse";
             } else {
                 config.cursorMode = "key";
-                document.getElementById("button0").value = "cursorMode:key";
+                document.getElementById("cursorMode").value = "cursorMode:key";
             }
             break;
-        case "button1":
+        case "muteBgm":
             config.muteBgm = !config.muteBgm;
-            document.getElementById("button1").value = "muteBgm:" + config.muteBgm;
+            document.getElementById("muteBgm").value = "muteBgm:" + config.muteBgm;
+            break;
+        case "NextBgm":
+            if (!stageBgm.paused) { stageBgm.currentTime = 100000; }
             break;
 
     }

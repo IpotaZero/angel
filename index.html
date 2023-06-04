@@ -1,20 +1,33 @@
 <!DOCTYPE html>
 <html lang="ja">
-<title>angel</title>
 
 <head>
+    <meta charset="utf-8">
+
+    <title>angel</title>
+
+    <!--これ意味あるの？-->
+    <meta name="programer" content="IpotaZero">
+    <meta name="sound" content="Well_Defined">
+
     <style>
         body {
             color: "black";
             font-size: 16px;
             font-family: serif;
             line-height: 20px;
+
+            user-select: none;
+        }
+
+        p0 {
+            user-select: text;
         }
     </style>
 </head>
 
 <body>
-    <!--キャンバスを作る　横960px縦640px-->
+    <!--キャンバスを作る　横512px縦512px-->
     <canvas id="canvas0" width="512" height="512"></canvas>
 
     <script src="Class.js"></script>
@@ -64,19 +77,16 @@
     </script>
 
     <br>
-    <input type="button" id="button0" value="cursorMode:key" onclick="button(id);"></input>
-    <input type="button" id="button1" value="muteBgm:true" onclick="button(id);"></input>
+    <input type="button" id="cursorMode" value="cursorMode:key" onclick="button(id);"></input>
+    <input type="button" id="muteBgm" value="muteBgm:true" onclick="button(id);"></input>
+    <input type="button" id="NextBgm" value="NextBgm" onclick="button(id);"></input>
 
-    <br>
-    操作:<br>
-    Arrowで移動<br>
-    KeyZ∨Clickで決定<br>
-    KeyXでアイテム確認<br>
-    設定:<br>
-    フォントなど<br>
-    config.(name)=(数値や真偽値);<br>
-    として変更<br>
+
 
 </body>
+
+<p0>
+
+</p0>
 
 </html>

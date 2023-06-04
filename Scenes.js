@@ -177,7 +177,7 @@ const Scene3 = class extends Scene {
         Itext(this.f, fontsize, 120 + fontsize * (1 + this.num), "→");
 
         if (this.isopt == 1) {
-            Itext4(this.f0, fontsize, 300, fontsize, ["散歩ゲー", "矢印キーで移動、Zキーでクリック", "Xキーでアイテムの確認"]);
+            Itext4(this.f0, fontsize, 300, fontsize, ["散歩ゲー", "Arrowで移動、KeyZ∨Clickで決定", "KeyXでアイテムの確認"]);
             this.f0++;
         }
 
