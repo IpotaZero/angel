@@ -12,5 +12,7 @@ let config = {
     //文字送りの速さ
     textSpeed: 1,
     //bgmきる?
-    muteBgm: true,
+    bgm_muted: true,
+    //音量
+    bgm_volume: 0.4
 };

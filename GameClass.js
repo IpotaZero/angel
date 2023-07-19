@@ -1,6 +1,6 @@
 //矩形のステージ
 const Stage = class {
-    constructor(_w, _h, imageArr) {
+    constructor(_w, _h, _imageNameArr) {
         let a = [];
 
         //aにw個の0を入れる
@@ -8,7 +8,7 @@ const Stage = class {
             a.push(0);
         }
 
-        let _stage = []
+        let _stage = [];
 
         //stageにh個のaの中身を入れる
         for (let i = 0; i < _h; i++) {
@@ -18,18 +18,20 @@ const Stage = class {
         this.stage = _stage;
         this.h = _h;
         this.w = _w;
-        this.frame = 0;
+        this.animeFrame = 0;
         this.animeNum = 0;
 
-        this.bg = imageArr;
+        //画像の名前と表示フレームを交互に詰め込んだ配列
+        this.imageNameArr = _imageNameArr;
     }
 
     //代入
     assign(x, y, n) {
-        if (0 <= x && x <= this.w && 0 <= y && y <= this.h) {
+        if (0 <= x && x <= this.w - 1 && 0 <= y && y <= this.h - 1) {
             this.stage[y][x] = n;
         } else {
-            console.log("そんな場所はない");
+            //定義域エラー
+            console.log("Error:eventAssignment");
         }
     }
 
@@ -44,36 +46,44 @@ const Stage = class {
 
     //描画
     draw() {
-        ctx.drawImage(this.bg[this.animeNum], 0, 0, width, height);
-        this.frame++;
-        if (this.bg[this.animeNum + 1] == this.frame) { this.animeNum = (this.animeNum + 2) % this.bg.length; this.frame = 0; }
+        //背景の描画
+        ctx.drawImage(ImgData[this.imageNameArr[this.animeNum]], 0, 0, width, height);
+        this.animeFrame++;
+        if (this.imageNameArr[this.animeNum + 1] == this.animeFrame) { this.animeNum = (this.animeNum + 2) % this.imageNameArr.length; this.animeFrame = 0; }
 
         for (let i = 0; i < this.h; i++) {
             for (let j = 0; j < this.w; j++) {
-                let s = this.stage[i][j];
+                //ここのイベントの名前
+                let eventName = this.stage[i][j];
 
-                if (s != 0) {
+                //イベントが空でないなら
+                if (eventName != 0) {
+                    //当たり判定の描画
                     if (config.cd) { Irect(width / this.w * j, height / this.h * i, width / this.w, height / this.h, "rgba(255,0,0,0.1)"); }
-                    if (s.name == "Movement") {
-                        switch (s.dir) {
-                            case "right":
-                                ctx.drawImage(Imgs.img_arrow, 0, 0, 128, 128, width / this.w * j, height / this.h * i, 128, 128);
-                                break;
-                            case "left":
-                                ctx.drawImage(Imgs.img_arrow, 128, 0, 128, 128, width / this.w * j, height / this.h * i, 128, 128);
-                                break;
-                            case "up":
-                                ctx.drawImage(Imgs.img_arrow, 256, 0, 128, 128, width / this.w * j, height / this.h * i, 128, 128);
-                                break;
-                            case "down":
-                                ctx.drawImage(Imgs.img_arrow, 384, 0, 128, 128, width / this.w * j, height / this.h * i, 128, 128);
-                                break;
-                        }
-
-                    }
+                    this.drawMovementArrow(EventData[eventName], i, j);  //移動イベントの矢印描画
                 }
 
             }
+        }
+    }
+
+    drawMovementArrow(event, i, j) {
+        if (event.name == "Movement") {
+            switch (event.dir) {
+                case "right":
+                    ctx.drawImage(ImgData.img_arrow, 0, 0, 128, 128, width / this.w * j, height / this.h * i, 128, 128);
+                    break;
+                case "left":
+                    ctx.drawImage(ImgData.img_arrow, 128, 0, 128, 128, width / this.w * j, height / this.h * i, 128, 128);
+                    break;
+                case "up":
+                    ctx.drawImage(ImgData.img_arrow, 256, 0, 128, 128, width / this.w * j, height / this.h * i, 128, 128);
+                    break;
+                case "down":
+                    ctx.drawImage(ImgData.img_arrow, 384, 0, 128, 128, width / this.w * j, height / this.h * i, 128, 128);
+                    break;
+            }
+
         }
     }
 };
@@ -130,30 +140,48 @@ const Conversation = class extends Event {
     }
 };
 
+const Select = class extends Event {
+    constructor(_option) {
+        super();
+        this.name = "Select";
+        this.option = _option;
+    }
+
+    Start() {
+        this.end = false;
+        this.frame = 0;
+        this.num = 0;
+    }
+
+    Loop() {
+        Irect(0, Iheight, width, height - Iheight, "rgba(255,255,255," + this.frame / 24 + ")");
+        Ifont(24, "black");
+        Itext4(this.frame, fontsize, Iheight + fontsize, fontsize, this.option);
+
+        ctx.drawImage(ImgData.icn_cursor, 12, Iheight + fontsize * this.num);
+
+        if (Push.includes("ArrowUp")) { this.num--; se_key.currentTime = 0; se_key.play(); }
+        if (Push.includes("ArrowDown")) { this.num++; se_key.currentTime = 0; se_key.play(); }
+
+        this.num = (this.num + this.option.length) % this.option.length;
+
+        if (Push.includes("KeyZ")) {
+            this.end = true;
+            se_click.play();
+        }
+
+        this.frame++;
+    }
+};
+
 //移動イベント、fromからgotoへdir方向に
 const Movement = class extends Event {
     constructor(_from, _goto, _dir) {
         super();
         this.goto = _goto;
+        this.from = _from;
         this.dir = _dir;
         this.name = "Movement";
-
-        //from側のステージにこれ自身を設定
-        switch (this.dir) {
-            case "right":
-                _from.register(3, 1, 1, 2, this);
-                break;
-
-            case "left":
-                _from.register(0, 1, 1, 2, this);
-                break;
-            case "up":
-                _from.register(1, 0, 2, 1, this);
-                break;
-            case "down":
-                _from.register(1, 3, 2, 1, this);
-                break;
-        }
     }
 
     Start() {
@@ -166,27 +194,27 @@ const Movement = class extends Event {
 
         ctx.clearRect(0, 0, width, height);
 
-        let bg0 = NowStage.bg[0];
-        let bg1 = this.goto.bg[0];
+        let bg0 = StageData[this.from].imageNameArr[0];
+        let bg1 = StageData[this.goto].imageNameArr[0];
 
         switch (this.dir) {
             case "right":
-                ctx.drawImage(bg0, -width * this.frame / moveFrame, 0, width, height);
-                ctx.drawImage(bg1, width - width * this.frame / moveFrame, 0, width, height);
+                ctx.drawImage(ImgData[bg0], -width * this.frame / moveFrame, 0, width, height);
+                ctx.drawImage(ImgData[bg1], width - width * this.frame / moveFrame, 0, width, height);
                 break;
 
             case "left":
-                ctx.drawImage(bg0, width * this.frame / moveFrame, 0, width, height);
-                ctx.drawImage(bg1, -width + width * this.frame / moveFrame, 0, width, height);
+                ctx.drawImage(ImgData[bg0], width * this.frame / moveFrame, 0, width, height);
+                ctx.drawImage(ImgData[bg1], -width + width * this.frame / moveFrame, 0, width, height);
                 break;
 
             case "up":
-                ctx.drawImage(bg0, 0, height * this.frame / moveFrame, width, height);
-                ctx.drawImage(bg1, 0, -height + height * this.frame / moveFrame, width, height);
+                ctx.drawImage(ImgData[bg0], 0, height * this.frame / moveFrame, width, height);
+                ctx.drawImage(ImgData[bg1], 0, -height + height * this.frame / moveFrame, width, height);
                 break;
             case "down":
-                ctx.drawImage(bg0, 0, -height * this.frame / moveFrame, width, height);
-                ctx.drawImage(bg1, 0, height - height * this.frame / moveFrame, width, height);
+                ctx.drawImage(ImgData[bg0], 0, -height * this.frame / moveFrame, width, height);
+                ctx.drawImage(ImgData[bg1], 0, height - height * this.frame / moveFrame, width, height);
                 break;
         }
 
@@ -198,7 +226,7 @@ const Movement = class extends Event {
     }
 
     End() {
-        NowStage = this.goto;
+        NowStageName = this.goto;
     }
 };
 
@@ -248,7 +276,7 @@ const ImgTxt = class {
 
         if (this.imgArr != null) {
             //画像表示
-            ctx.drawImage(this.imgArr[this.animeNum], 0, 0, width, height);
+            ctx.drawImage(ImgData[this.imgArr[this.animeNum]], 0, 0, width, height);
             this.imgFrame++;
             if (this.imgFrame == this.imgArr[this.animeNum + 1]) { this.animeNum = (this.animeNum + 2) % this.imgArr.length; this.imgFrame = 0; }
         }

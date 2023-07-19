@@ -1,12 +1,10 @@
 const cvs = document.getElementById("canvas0");
 const ctx = cvs.getContext("2d", { willReadFrequently: true });
 
-const width = cvs.width;    //=720
-const height = cvs.height;  //=720
+const width = cvs.width;    //=512
+const height = cvs.height;  //=512
 
-const Iheight = height * 3 / 4; //=540
-
-const drawheight = 480;
+const Iheight = height * 3 / 4; //=384
 
 let Pressed = [];
 let Push = [];
@@ -25,6 +23,7 @@ function keydownEvent(e) {
         //console.log(Push);
     }
 }
+
 function keyupEvent(e) {
     Pressed = Pressed.filter((element) => { return element != e.code; });
 }
@@ -33,14 +32,14 @@ function getMousePosition(e) {
     mouse = new vec(e.clientX - cvs.getBoundingClientRect().left, e.clientY - cvs.getBoundingClientRect().top);
 }
 
-function getMouseClick(e) {
+function getMouseClick() {
     Push.push("KeyZ");
 }
 
 let fontsize = 24;
 
 function button(id) {
-    console.log("pressed_" + id);
+    console.log(id + "_is_pressed");
     switch (id) {
         case "cursorMode":
             if (config.cursorMode == "key") {
@@ -52,12 +51,16 @@ function button(id) {
             }
             break;
         case "muteBgm":
-            config.muteBgm = !config.muteBgm;
-            document.getElementById("muteBgm").value = "muteBgm:" + config.muteBgm;
+            config.bgm_muted = !config.bgm_muted;
+            document.getElementById("muteBgm").value = "bgm_muted:" + config.bgm_muted;
             break;
         case "NextBgm":
             if (!stageBgm.paused) { stageBgm.currentTime = 100000; }
             break;
+        case "save":
+            let data = [];
+            data.push(Now)
+            console.log()
 
     }
 

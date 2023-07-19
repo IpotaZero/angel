@@ -7,7 +7,7 @@
     <title>angel</title>
 
     <!--これ意味あるの？-->
-    <meta name="programer" content="IpotaZero">
+    <meta name="programmer" content="IpotaZero">
     <meta name="sound" content="Well_Defined">
 
     <style>
@@ -22,6 +22,10 @@
 
         p0 {
             user-select: text;
+        }
+
+        canvas {
+            cursor: none;
         }
     </style>
 </head>
@@ -48,7 +52,7 @@
         let stageBgm = stageBgmList[0];
         let stageBgmNum = 0;
 
-        NowStage = Sts.stage_op;
+        NowStageName = "stage_op";
 
         const scenemanager = new SceneManager(scene3);
 
@@ -58,15 +62,16 @@
             //外枠描画
             Irect(0, 0, width, height, "black", "stroke", 4);
 
+            //次のBGM
             if (stageBgm.ended) {
                 stageBgmNum = (stageBgmNum + 1) % stageBgmList.length;
                 stageBgm = stageBgmList[stageBgmNum];
                 stageBgm.currentTime = 0;
-                stageBgm.volume = 0.6;
                 stageBgm.play();
             }
 
-            stageBgm.muted = config.muteBgm;
+            stageBgm.muted = config.bgm_muted;
+            stageBgm.volume = config.bgm_volume;
 
             Push = [];
         }
@@ -80,8 +85,7 @@
     <input type="button" id="cursorMode" value="cursorMode:key" onclick="button(id);"></input>
     <input type="button" id="muteBgm" value="muteBgm:true" onclick="button(id);"></input>
     <input type="button" id="NextBgm" value="NextBgm" onclick="button(id);"></input>
-
-
+    <input type="button" id="save" value="Save" onclick="button(id);"></input>
 
 </body>
 

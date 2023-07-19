@@ -1,5 +1,5 @@
 //p:ゲーム内座標、dp:画面上座標
-let cursor = { p: new vec(0, 0), dp: new vec(90, 90), speed: config.cursorSpeed, r: 10 };
+let cursor = { p: new vec(0, 0), dp: new vec(90, 90), r: 10 };
 
 const Scene0 = class extends Scene {
     constructor() {
@@ -8,9 +8,9 @@ const Scene0 = class extends Scene {
 
     Loop() {
         //s:現在位置のEvent、h:縦幅、w:横幅
-        let s = NowStage.stage[cursor.p.y][cursor.p.x];
-        let h = NowStage.h;
-        let w = NowStage.w;
+        let s = StageData[NowStageName].stage[cursor.p.y][cursor.p.x];
+        let h = StageData[NowStageName].h;
+        let w = StageData[NowStageName].w;
 
         if (config.cursorMode == "key") {
             //カーソルの移動
@@ -34,7 +34,7 @@ const Scene0 = class extends Scene {
         cursor.p.y = Math.floor(cursor.dp.y / height * h);
 
         if (Push.includes("KeyZ") && s != 0) {
-            NowEvent = s;
+            NowEventName = s;
             scenemanager.MoveTo(scene1);
             se_click.play();
         }
@@ -47,11 +47,17 @@ const Scene0 = class extends Scene {
         ctx.globalAlpha = 1;
 
         //ステージ描画
-        NowStage.draw();
+        StageData[NowStageName].draw();
 
         //カーソルの描画
         Icircle(cursor.dp.x, cursor.dp.y, cursor.r, "rgba(0,0,255,0.3)");
-        ctx.drawImage(Imgs.img_cursor, cursor.dp.x - 10, cursor.dp.y);
+        ctx.drawImage(ImgData.img_cursor, cursor.dp.x - 10, cursor.dp.y);
+
+        if (s != 0) {
+            if (s.name != "Movement") {
+                ctx.drawImage(ImgData.bikkuri, cursor.dp.x + 32, cursor.dp.y - 32, 64, 64);
+            }
+        }
 
         if (config.cd) {
             //座標の表示
@@ -69,24 +75,26 @@ const Scene1 = class extends Scene {
     }
 
     Start() {
-        NowEvent.Start();
+        EventData[NowEventName].Start();
     }
 
     Loop() {
         //終わったらステージに戻る
-        if (NowEvent.end) {
-            NowEvent.End();
+        if (EventData[NowEventName].end) {
+            EventData[NowEventName].End();
             //続きもの
-            if (NextEvent.length > 0) {
-                NowEvent = NextEvent[0];
-                NextEvent.shift();
+            if (NextEventName.length > 0) {
+                if (NextEventName[0] != null) {
+                    NowEventName = NextEventName[0];
+                    NextEventName.shift();
 
-                scene1.Start();
+                    scene1.Start();
+                }
             } else {
                 scenemanager.MoveTo(scene0);
             }
         } else {
-            NowEvent.Loop();
+            EventData[NowEventName].Loop();
         }
     }
 };
@@ -96,11 +104,13 @@ const Scene2 = class extends Scene {
     constructor() {
         super();
         this.inum = 0;      //選択しているアイテムの番号
-        this.iex = false;   //説明を表示するか
     }
 
     Start() {
-        this.iex = false;
+        //this.inum = 0;
+        this.iex = false;   //説明を表示するか
+        this.frame0 = 0;
+        this.frame1 = 0;
     }
 
     Loop() {
@@ -112,10 +122,21 @@ const Scene2 = class extends Scene {
             //文字
             Ifont(24, "black");
 
-            Itext(1000, 0, Iheight + fontsize * 2, "→");
-            Itext(1000, fontsize * 2, Iheight + fontsize * 2, Items[this.inum].name); ctx.drawImage(Items[this.inum].icon, fontsize, Iheight + fontsize, fontsize, fontsize);
-            if (this.inum > 0) { Itext(1000, fontsize * 2, Iheight + fontsize, Items[this.inum - 1].name); ctx.drawImage(Items[this.inum - 1].icon, fontsize, Iheight, fontsize, fontsize); }
-            if (this.inum < Items.length - 1) { Itext(1000, fontsize * 2, Iheight + fontsize * 3, Items[this.inum + 1].name); ctx.drawImage(Items[this.inum + 1].icon, fontsize, Iheight + fontsize * 2, fontsize, fontsize); }
+            ctx.drawImage(ImgData.icn_cursor, 0, Iheight + fontsize);
+
+            //1個上のアイテムの表示
+            if (this.inum > 0) {
+                let item0 = ItemData[Items[this.inum - 1]];
+                Itext(this.frame0, fontsize * 2, Iheight + fontsize, item0.name);
+                ctx.drawImage(ImgData[item0.icon], fontsize, Iheight, fontsize, fontsize);
+            }
+
+            //アイテムの表示
+            for (let i = 0; i < Items.length - this.inum; i++) {
+                let item0 = ItemData[Items[this.inum + i]];
+                Itext(this.frame0, fontsize * 2, Iheight + fontsize * (2 + i), item0.name);
+                ctx.drawImage(ImgData[item0.icon], fontsize, Iheight + fontsize * (1 + i), fontsize, fontsize);
+            }
 
             //キー操作
             if (Push.includes("ArrowUp")) { this.inum--; this.iex = false; se_key.currentTime = 0; se_key.play(); }
@@ -123,15 +144,27 @@ const Scene2 = class extends Scene {
 
             this.inum = (this.inum + Items.length) % Items.length;
 
+
+            let item = ItemData[Items[this.inum]];
+
             //説明を見る
             if (Push.includes("KeyZ")) {
-                this.iex = !this.iex;
-                se_click.play();
+                if (item.ex == null) {
+
+                } else {
+                    this.iex = !this.iex;
+                    se_click.play();
+                    this.frame1 = 0;
+                }
+
             }
 
             if (this.iex) {
-                Itext(1000, fontsize, Iheight + fontsize * 5, Items[this.inum].ex);
+                Itext(this.frame1, fontsize, Iheight + fontsize * 5, item.ex);
             }
+
+            this.frame0++;
+            this.frame1++;
         }
 
         //枠線
@@ -152,7 +185,7 @@ const Scene3 = class extends Scene {
         this.f = 0;
         this.num = 0;
         this.isopt = 0;
-        this.title;
+        this.title = "無題9番";
         this.option = ["始める", "遊び方"];
 
         this.f0 = 0;
@@ -172,12 +205,12 @@ const Scene3 = class extends Scene {
         Itext(this.frame, 0, fontsize, this.title);
 
         Ifont(24, "black");
-        Itext4(this.f, fontsize * 2, 120 + fontsize, fontsize, this.option);
+        Itext4(this.f, fontsize, 120 + fontsize, fontsize, this.option);
 
-        Itext(this.f, fontsize, 120 + fontsize * (1 + this.num), "→");
+        ctx.drawImage(ImgData.icn_cursor, 0, 120 + fontsize * this.num);
 
         if (this.isopt == 1) {
-            Itext4(this.f0, fontsize, 300, fontsize, ["散歩ゲー", "Arrowで移動、KeyZ∨Clickで決定", "KeyXでアイテムの確認"]);
+            Itext5(this.f0, fontsize, 300, fontsize, "散歩ゲー\nArrowで移動、KeyZ∨Clickで決定\nKeyXでアイテムの確認");
             this.f0++;
         }
 
@@ -207,8 +240,6 @@ const Scene3 = class extends Scene {
                     case 1:
                         this.isopt = 1; this.f0 = 0;
                         break;
-                    case 2:
-                        break;
                 }
 
                 se_click.play();
@@ -217,7 +248,35 @@ const Scene3 = class extends Scene {
     }
 };
 
+//タイトル画面
+const Scene4 = class extends Scene {
+    constructor() {
+        super();
+        this.frame = 0;
+    }
+
+    Start() {
+
+    }
+
+    End() {
+
+    }
+
+    Loop() {
+        ctx.clearRect(0, 0, width, height);
+
+        Ifont(48, "black");
+        Itext(this.frame, width - 3 * fontsize, height - 6, "End");
+
+        this.frame++;
+    }
+
+
+};
+
 const scene0 = new Scene0();
 const scene1 = new Scene1();
 const scene2 = new Scene2();
 const scene3 = new Scene3();
+const scene4 = new Scene4();
