@@ -57,10 +57,6 @@ function button(id) {
         case "NextBgm":
             if (!stageBgm.paused) { stageBgm.currentTime = 100000; }
             break;
-        case "save":
-            let data = [];
-            data.push(Now)
-            console.log()
 
     }
 
